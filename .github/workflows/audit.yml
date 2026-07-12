@@ -1,0 +1,26 @@
+name: Weekly Security Audit
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"  # Every Monday at 8:00 UTC
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo install cargo-audit
+      - run: cargo audit
+      - run: cargo install cargo-deny
+      - run: cargo deny check advisories licenses sources
+
+  outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo outdated --exit-code 1 || true

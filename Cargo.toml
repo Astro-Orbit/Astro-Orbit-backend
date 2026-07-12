@@ -1,0 +1,109 @@
+[package]
+name = "astro-orbit-backend"
+version = "0.1.0"
+edition = "2021"
+description = "Open-source developer platform for the Stellar and Soroban ecosystem"
+authors = ["Astro Orbit Contributors"]
+license = "MIT"
+repository = "https://github.com/astro-orbit/astro-orbit-backend"
+homepage = "https://astro-orbit.dev"
+keywords = ["stellar", "soroban", "blockchain", "developer-platform", "smart-contracts"]
+categories = ["web-programming", "cryptography", "development-tools"]
+
+[features]
+default = ["db-postgres", "cache-redis", "telemetry"]
+db-postgres = ["sqlx/postgres"]
+cache-redis = ["redis"]
+telemetry = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+analytics = []
+cli = []
+production = []
+
+[dependencies]
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+sqlx = { version = "0.8", features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "json",
+    "migrate",
+], optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter", "fmt"] }
+tracing-appender = "0.2"
+thiserror = "2"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+dotenvy = "0.15"
+redis = { version = "0.28", features = ["tokio-comp", "connection-manager"], optional = true }
+tower-http = { version = "0.6", features = [
+    "cors",
+    "trace",
+    "compression-gzip",
+    "limit",
+] }
+tower = { version = "0.5", features = ["util"] }
+opentelemetry = { version = "0.28", features = ["metrics", "trace"], optional = true }
+opentelemetry_sdk = { version = "0.28", features = ["metrics", "trace", "rt-tokio"], optional = true }
+opentelemetry-otlp = { version = "0.28", optional = true }
+tracing-opentelemetry = { version = "0.30", optional = true }
+prometheus = { version = "0.13", features = ["process"] }
+axum-prometheus = "0.9"
+validator = { version = "0.19", features = ["derive"] }
+jsonwebtoken = "9"
+ed25519-dalek = "2"
+rand = "0.8"
+hex = "0.4"
+base64 = "0.22"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+mime = "0.3"
+schemars = { version = "1", features = ["uuid1", "chrono04"], optional = true }
+utoipa = { version = "5", features = ["uuid", "chrono", "axum_extras"], optional = true }
+utoipa-swagger-ui = { version = "8", features = ["axum"], optional = true }
+inquiry = "0.1"
+arc-swap = "1"
+dashmap = "6"
+parking_lot = "0.12"
+futures = "0.3"
+bytes = "1"
+async-trait = "0.1"
+derive_more = { version = "2", features = ["from", "into", "deref", "display"] }
+anyhow = "1"
+static_assertions = "1"
+
+[dev-dependencies]
+reqwest = { version = "0.12", features = ["json"] }
+criterion = { version = "0.5", features = ["async_futures"] }
+proptest = "1"
+serial_test = "3"
+tracing-test = "0.2"
+wiremock = "0.6"
+
+[[bench]]
+name = "repository"
+harness = false
+
+[[bench]]
+name = "crypto"
+harness = false
+
+[profile.release]
+opt-level = 3
+debug = false
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[package.metadata.docs.rs]
+features = ["default", "telemetry"]
+rustdoc-args = ["--cfg", "docsrs"]

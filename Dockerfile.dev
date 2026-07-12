@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+# ────────────────────────────────────────────────────────────
+# Astro Orbit Backend — Development Build
+# ────────────────────────────────────────────────────────────
+
+FROM rust:1.84-slim-bookworm
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cargo install cargo-watch
+
+WORKDIR /app
+
+COPY . .
+
+CMD ["cargo", "watch", "-x", "run"]

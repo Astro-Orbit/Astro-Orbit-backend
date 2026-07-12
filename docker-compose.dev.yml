@@ -1,0 +1,58 @@
+# ────────────────────────────────────────────────────────────
+# Astro Orbit Backend — Development Docker Compose
+# ────────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=development
+      - DATABASE_URL=postgres://astro_orbit:astro_orbit@db:5432/astro_orbit_dev
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata-dev:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: astro_orbit
+      POSTGRES_PASSWORD: astro_orbit
+      POSTGRES_DB: astro_orbit_dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U astro_orbit"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata-dev:
+  cargo-cache:

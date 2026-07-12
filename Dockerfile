@@ -18,6 +18,7 @@ COPY Cargo.toml Cargo.lock* ./
 RUN cargo build --release --features db-postgres,cache-redis,telemetry 2>/dev/null || true
 
 COPY src ./src
+COPY benches ./benches
 COPY migrations ./migrations
 RUN cargo build --release --features db-postgres,cache-redis,telemetry
 

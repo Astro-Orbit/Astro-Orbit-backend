@@ -11,6 +11,7 @@
 #![allow(clippy::cast_sign_loss)]
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::default_trait_access)]
+#![allow(clippy::cast_precision_loss)]
 
 pub mod auth;
 pub mod cache;
@@ -30,6 +31,7 @@ pub mod repositories;
 pub mod response;
 pub mod router;
 pub mod services;
+pub mod state;
 pub mod stellar;
 pub mod telemetry;
 pub mod utils;

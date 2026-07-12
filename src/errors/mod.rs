@@ -5,7 +5,8 @@ use std::borrow::Cow;
 /// Unified application error type.
 ///
 /// Every fallible operation in the system produces an `AppError`.
-/// Handlers convert these into structured HTTP error responses.
+/// Handlers convert these into structured HTTP error responses
+/// that include a request ID and timestamp for traceability.
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {
     #[error("not found: {0}")]
@@ -73,11 +74,13 @@ impl AppError {
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status = self.status_code();
+
         let body = serde_json::json!({
             "success": false,
             "error": {
                 "code": self.error_code(),
                 "message": self.to_string(),
+                "timestamp": chrono::Utc::now().to_rfc3339(),
             }
         });
 
@@ -156,5 +159,12 @@ impl From<redis::RedisError> for AppError {
     fn from(err: redis::RedisError) -> Self {
         tracing::error!(error = %err, "redis error");
         Self::Unavailable("cache service unavailable".into())
+    }
+}
+
+impl From<anyhow::Error> for AppError {
+    fn from(err: anyhow::Error) -> Self {
+        tracing::error!(error = %err, "internal error");
+        Self::Internal(err.to_string().into())
     }
 }

@@ -10,13 +10,7 @@ pub async fn middleware(request: Request, next: Next) -> Response {
     let mut response = next.run(request).await;
     let duration = start.elapsed();
 
-    response.headers_mut().insert(
-        "X-Response-Time",
-        format!("{}ms", duration.as_millis()).parse().unwrap(),
-    );
-    response.headers_mut().insert(
-        "X-Api-Version",
-        env!("CARGO_PKG_VERSION").parse().unwrap(),
-    );
+    response.headers_mut().insert("X-Response-Time", format!("{}ms", duration.as_millis()).parse().unwrap());
+    response.headers_mut().insert("X-Api-Version", env!("CARGO_PKG_VERSION").parse().unwrap());
     response
 }

@@ -1,6 +1,6 @@
 [package]
 name = "astro-orbit-backend"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Open-source developer platform for the Stellar and Soroban ecosystem"
 authors = ["Astro Orbit Contributors"]
@@ -11,16 +11,18 @@ keywords = ["stellar", "soroban", "blockchain", "developer-platform", "smart-con
 categories = ["web-programming", "cryptography", "development-tools"]
 
 [features]
-default = ["db-postgres", "cache-redis", "telemetry"]
+default = ["db-postgres", "cache-redis", "telemetry", "openapi"]
 db-postgres = ["sqlx/postgres"]
 cache-redis = ["redis"]
 telemetry = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+openapi = ["dep:utoipa", "dep:utoipa-swagger-ui", "dep:schemars"]
 analytics = []
 cli = []
 production = []
 
 [dependencies]
 axum = "0.8"
+axum-extra = { version = "0.10", features = ["typed-header"] }
 tokio = { version = "1", features = ["full"] }
 sqlx = { version = "0.8", default-features = false, features = [
     "runtime-tokio",
@@ -41,18 +43,22 @@ thiserror = "2"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 dotenvy = "0.15"
-redis = { version = "0.28", features = ["tokio-comp", "connection-manager"], optional = true }
+redis = { version = "0.28", features = ["tokio-comp", "connection-manager", "aio"], optional = true }
 tower-http = { version = "0.6", features = [
     "cors",
     "trace",
     "compression-gzip",
     "limit",
+    "request-id",
+    "timeout",
+    "set-header",
+    "sensitive-headers",
 ] }
 tower = { version = "0.5", features = ["util"] }
 opentelemetry = { version = "0.28", features = ["metrics", "trace"], optional = true }
 opentelemetry_sdk = { version = "0.28", features = ["metrics", "trace", "rt-tokio"], optional = true }
-opentelemetry-otlp = { version = "0.28", optional = true }
-tracing-opentelemetry = { version = "0.30", optional = true }
+opentelemetry-otlp = { version = "0.28", features = ["grpc-tonic"], optional = true }
+tracing-opentelemetry = { version = "0.28", optional = true }
 prometheus = { version = "0.14", features = ["process"] }
 axum-prometheus = "0.9"
 validator = { version = "0.19", features = ["derive"] }
@@ -76,6 +82,8 @@ async-trait = "0.1"
 derive_more = { version = "2", features = ["from", "into", "deref", "display"] }
 anyhow = "1"
 static_assertions = "1"
+pin-project = "1"
+tokio-util = { version = "0.7", features = ["io"] }
 
 [dev-dependencies]
 reqwest = { version = "0.12", features = ["json"] }
@@ -84,6 +92,7 @@ proptest = "1"
 serial_test = "3"
 tracing-test = "0.2"
 wiremock = "0.6"
+testcontainers = "0.23"
 
 [[bench]]
 name = "repository"

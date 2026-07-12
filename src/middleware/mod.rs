@@ -11,12 +11,7 @@ use crate::config::Config;
 pub fn apply(config: &Config, router: Router) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(
-            config
-                .security
-                .cors_allowed_origins
-                .iter()
-                .map(|origin| origin.parse().unwrap())
-                .collect::<Vec<_>>(),
+            config.security.cors_allowed_origins.iter().map(|origin| origin.parse().unwrap()).collect::<Vec<_>>(),
         )
         .allow_methods(Any)
         .allow_headers(Any);

@@ -75,10 +75,7 @@ pub async fn get_by_id(Path(_id): Path<Uuid>) -> ApiResponse<ContractResponse> {
     })
 }
 
-pub async fn update(
-    Path(_id): Path<Uuid>,
-    Json(_req): Json<UpdateContractRequest>,
-) -> ApiResponse<ContractResponse> {
+pub async fn update(Path(_id): Path<Uuid>, Json(_req): Json<UpdateContractRequest>) -> ApiResponse<ContractResponse> {
     ApiResponse::success(ContractResponse {
         id: Uuid::new_v4(),
         project_id: Uuid::new_v4(),
@@ -103,8 +100,6 @@ pub async fn create_version(
     })
 }
 
-pub async fn list_versions(
-    Path(_contract_id): Path<Uuid>,
-) -> ApiResponse<Vec<ContractVersionResponse>> {
+pub async fn list_versions(Path(_contract_id): Path<Uuid>) -> ApiResponse<Vec<ContractVersionResponse>> {
     ApiResponse::success(vec![])
 }

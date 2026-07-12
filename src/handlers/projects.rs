@@ -61,10 +61,7 @@ pub async fn get_by_id(Path(_id): Path<Uuid>) -> ApiResponse<ProjectResponse> {
     })
 }
 
-pub async fn update(
-    Path(_id): Path<Uuid>,
-    Json(_req): Json<UpdateProjectRequest>,
-) -> ApiResponse<ProjectResponse> {
+pub async fn update(Path(_id): Path<Uuid>, Json(_req): Json<UpdateProjectRequest>) -> ApiResponse<ProjectResponse> {
     ApiResponse::success(ProjectResponse {
         id: Uuid::new_v4(),
         organization_id: Uuid::new_v4(),

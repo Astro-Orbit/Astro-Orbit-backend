@@ -16,20 +16,14 @@ pub async fn init_pool(config: &DatabaseConfig) -> Arc<PgPool> {
         .await
         .expect("failed to connect to database");
 
-    tracing::info!(
-        max_connections = config.max_connections,
-        "database connection pool established"
-    );
+    tracing::info!(max_connections = config.max_connections, "database connection pool established");
 
     Arc::new(pool)
 }
 
 /// Runs all pending database migrations.
 pub async fn run_migrations(pool: &PgPool) {
-    sqlx::migrate!("./migrations")
-        .run(pool)
-        .await
-        .expect("failed to run database migrations");
+    sqlx::migrate!("./migrations").run(pool).await.expect("failed to run database migrations");
 
     tracing::info!("database migrations applied successfully");
 }

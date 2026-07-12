@@ -15,17 +15,12 @@ pub async fn middleware(request: Request, next: Next) -> Response {
     Span::current().record("request_id", &request_id);
 
     let mut response = next.run(request).await;
-    response
-        .headers_mut()
-        .insert("X-Request-Id", request_id.parse().unwrap());
+    response.headers_mut().insert("X-Request-Id", request_id.parse().unwrap());
     response
 }
 
 fn generate_request_id() -> String {
     let count = REQUEST_COUNTER.fetch_add(1, Ordering::Relaxed);
-    let timestamp = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_millis();
+    let timestamp = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis();
     format!("req_{timestamp:x}_{count:x}")
 }

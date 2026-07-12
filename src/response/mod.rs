@@ -38,10 +38,7 @@ impl<T: Serialize> ApiResponse<T> {
             success: true,
             data,
             pagination: None,
-            meta: ResponseMeta {
-                request_id: String::new(),
-                timestamp: chrono::Utc::now().to_rfc3339(),
-            },
+            meta: ResponseMeta { request_id: String::new(), timestamp: chrono::Utc::now().to_rfc3339() },
         }
     }
 
@@ -52,10 +49,7 @@ impl<T: Serialize> ApiResponse<T> {
             success: true,
             data,
             pagination: Some(pagination),
-            meta: ResponseMeta {
-                request_id: String::new(),
-                timestamp: chrono::Utc::now().to_rfc3339(),
-            },
+            meta: ResponseMeta { request_id: String::new(), timestamp: chrono::Utc::now().to_rfc3339() },
         }
     }
 
@@ -87,10 +81,7 @@ impl<T: Serialize> CreatedResponse<T> {
         Self {
             success: true,
             data,
-            meta: ResponseMeta {
-                request_id: String::new(),
-                timestamp: chrono::Utc::now().to_rfc3339(),
-            },
+            meta: ResponseMeta { request_id: String::new(), timestamp: chrono::Utc::now().to_rfc3339() },
         }
     }
 

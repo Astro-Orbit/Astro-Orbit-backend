@@ -29,8 +29,6 @@ pub async fn mark_read(Path(_id): Path<Uuid>) -> NoContent {
     NoContent
 }
 
-pub async fn preferences(
-    Json(_req): Json<NotificationPreferencesRequest>,
-) -> ApiResponse<serde_json::Value> {
+pub async fn preferences(Json(_req): Json<NotificationPreferencesRequest>) -> ApiResponse<serde_json::Value> {
     ApiResponse::success(serde_json::json!({}))
 }

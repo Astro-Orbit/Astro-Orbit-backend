@@ -87,12 +87,7 @@ impl ProjectRepository for PgProjectRepository {
     }
 
     async fn delete(&self, id: Uuid) -> Result<(), sqlx::Error> {
-        sqlx::query(
-            r"UPDATE projects SET deleted_at = NOW() WHERE id = $1",
-        )
-        .bind(id)
-        .execute(&*self.pool)
-        .await?;
+        sqlx::query(r"UPDATE projects SET deleted_at = NOW() WHERE id = $1").bind(id).execute(&*self.pool).await?;
         Ok(())
     }
 }

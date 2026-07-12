@@ -23,11 +23,7 @@ static START_TIME: std::sync::LazyLock<Instant> = std::sync::LazyLock::new(Insta
 pub async fn health_check() -> Json<HealthResponse> {
     let uptime = START_TIME.elapsed().as_secs();
 
-    Json(HealthResponse {
-        status: "pass".to_string(),
-        version: env!("CARGO_PKG_VERSION"),
-        uptime,
-    })
+    Json(HealthResponse { status: "pass".to_string(), version: env!("CARGO_PKG_VERSION"), uptime })
 }
 
 #[derive(Debug, Serialize)]
@@ -37,7 +33,5 @@ pub struct VersionResponse {
 
 /// GET /v1/version
 pub async fn version() -> Json<VersionResponse> {
-    Json(VersionResponse {
-        version: env!("CARGO_PKG_VERSION"),
-    })
+    Json(VersionResponse { version: env!("CARGO_PKG_VERSION") })
 }

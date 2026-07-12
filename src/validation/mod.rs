@@ -8,6 +8,6 @@
 //! Dependencies: none
 //! Public API: All validation functions
 
-pub mod stellar;
-pub mod slug;
 pub mod environment;
+pub mod slug;
+pub mod stellar;

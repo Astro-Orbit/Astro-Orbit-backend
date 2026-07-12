@@ -9,7 +9,12 @@ pub trait OrgRepository: Send + Sync {
     async fn create(&self, name: &str, slug: &str, description: Option<&str>) -> Result<Organization, sqlx::Error>;
     async fn find_by_id(&self, id: Uuid) -> Result<Organization, sqlx::Error>;
     async fn find_by_user(&self, user_id: Uuid) -> Result<Vec<Organization>, sqlx::Error>;
-    async fn update(&self, id: Uuid, name: Option<&str>, description: Option<&str>) -> Result<Organization, sqlx::Error>;
+    async fn update(
+        &self,
+        id: Uuid,
+        name: Option<&str>,
+        description: Option<&str>,
+    ) -> Result<Organization, sqlx::Error>;
     async fn delete(&self, id: Uuid) -> Result<(), sqlx::Error>;
     async fn add_member(&self, org_id: Uuid, user_id: Uuid, role: &str) -> Result<(), sqlx::Error>;
     async fn remove_member(&self, org_id: Uuid, user_id: Uuid) -> Result<(), sqlx::Error>;
@@ -74,7 +79,12 @@ impl OrgRepository for PgOrgRepository {
         .await
     }
 
-    async fn update(&self, id: Uuid, name: Option<&str>, description: Option<&str>) -> Result<Organization, sqlx::Error> {
+    async fn update(
+        &self,
+        id: Uuid,
+        name: Option<&str>,
+        description: Option<&str>,
+    ) -> Result<Organization, sqlx::Error> {
         sqlx::query_as::<_, Organization>(
             r"
             UPDATE organizations
@@ -94,12 +104,7 @@ impl OrgRepository for PgOrgRepository {
     }
 
     async fn delete(&self, id: Uuid) -> Result<(), sqlx::Error> {
-        sqlx::query(
-            r"UPDATE organizations SET deleted_at = NOW() WHERE id = $1",
-        )
-        .bind(id)
-        .execute(&*self.pool)
-        .await?;
+        sqlx::query(r"UPDATE organizations SET deleted_at = NOW() WHERE id = $1").bind(id).execute(&*self.pool).await?;
         Ok(())
     }
 

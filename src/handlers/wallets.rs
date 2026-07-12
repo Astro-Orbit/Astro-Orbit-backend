@@ -46,10 +46,7 @@ pub async fn get_by_id(Path(_id): Path<Uuid>) -> ApiResponse<WalletResponse> {
     })
 }
 
-pub async fn update(
-    Path(_id): Path<Uuid>,
-    Json(_req): Json<UpdateWalletRequest>,
-) -> ApiResponse<WalletResponse> {
+pub async fn update(Path(_id): Path<Uuid>, Json(_req): Json<UpdateWalletRequest>) -> ApiResponse<WalletResponse> {
     ApiResponse::success(WalletResponse {
         id: Uuid::new_v4(),
         public_key: String::new(),

@@ -8,10 +8,7 @@ pub struct PaginationParams {
 impl PaginationParams {
     #[must_use]
     pub fn new(page: Option<u32>, per_page: Option<u32>) -> Self {
-        Self {
-            page: page.unwrap_or(1).max(1),
-            per_page: per_page.unwrap_or(20).clamp(1, 100),
-        }
+        Self { page: page.unwrap_or(1).max(1), per_page: per_page.unwrap_or(20).clamp(1, 100) }
     }
 
     #[must_use]

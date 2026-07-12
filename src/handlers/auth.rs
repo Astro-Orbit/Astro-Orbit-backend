@@ -40,10 +40,7 @@ pub struct RefreshResponse {
 }
 
 pub async fn challenge(Json(_req): Json<ChallengeRequest>) -> CreatedResponse<ChallengeResponse> {
-    CreatedResponse::new(ChallengeResponse {
-        challenge: String::new(),
-        session_id: String::new(),
-    })
+    CreatedResponse::new(ChallengeResponse { challenge: String::new(), session_id: String::new() })
 }
 
 pub async fn verify(Json(_req): Json<VerifyRequest>) -> CreatedResponse<VerifyResponse> {
@@ -55,10 +52,7 @@ pub async fn verify(Json(_req): Json<VerifyRequest>) -> CreatedResponse<VerifyRe
 }
 
 pub async fn refresh(Json(_req): Json<RefreshRequest>) -> ApiResponse<RefreshResponse> {
-    ApiResponse::success(RefreshResponse {
-        access_token: String::new(),
-        refresh_token: String::new(),
-    })
+    ApiResponse::success(RefreshResponse { access_token: String::new(), refresh_token: String::new() })
 }
 
 pub async fn logout() -> NoContent {

@@ -3,7 +3,12 @@ use uuid::Uuid;
 
 #[async_trait]
 pub trait ContractRepository: Send + Sync {
-    async fn create(&self, project_id: Uuid, name: &str, contract_id: &str) -> Result<crate::models::contract::Contract, sqlx::Error>;
+    async fn create(
+        &self,
+        project_id: Uuid,
+        name: &str,
+        contract_id: &str,
+    ) -> Result<crate::models::contract::Contract, sqlx::Error>;
     async fn find_by_id(&self, id: Uuid) -> Result<crate::models::contract::Contract, sqlx::Error>;
     async fn find_by_project(&self, project_id: Uuid) -> Result<Vec<crate::models::contract::Contract>, sqlx::Error>;
 }
@@ -21,7 +26,12 @@ impl PgContractRepository {
 
 #[async_trait]
 impl ContractRepository for PgContractRepository {
-    async fn create(&self, project_id: Uuid, name: &str, contract_id: &str) -> Result<crate::models::contract::Contract, sqlx::Error> {
+    async fn create(
+        &self,
+        project_id: Uuid,
+        name: &str,
+        contract_id: &str,
+    ) -> Result<crate::models::contract::Contract, sqlx::Error> {
         sqlx::query_as::<_, crate::models::contract::Contract>(
             r"
             INSERT INTO contracts (project_id, name, contract_id)

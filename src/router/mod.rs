@@ -75,9 +75,7 @@ pub fn build_router(config: &Arc<Config>) -> anyhow::Result<Router> {
         .route("/admin/orgs", get(handlers::admin::orgs))
         .route("/admin/stats", get(handlers::admin::stats));
 
-    let app = Router::new()
-        .nest("/v1", v1_router)
-        .route("/metrics", get(metrics_handler));
+    let app = Router::new().nest("/v1", v1_router).route("/metrics", get(metrics_handler));
 
     Ok(middleware::apply(config, app))
 }

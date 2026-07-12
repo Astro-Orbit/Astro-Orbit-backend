@@ -30,19 +30,13 @@ pub async fn create(
     Path(_org_id): Path<Uuid>,
     Json(_req): Json<CreateApiKeyRequest>,
 ) -> CreatedResponse<ApiKeyCreatedResponse> {
-    CreatedResponse::new(ApiKeyCreatedResponse {
-        id: Uuid::new_v4(),
-        name: String::new(),
-        key: String::new(),
-    })
+    CreatedResponse::new(ApiKeyCreatedResponse { id: Uuid::new_v4(), name: String::new(), key: String::new() })
 }
 
 pub async fn list(Path(_org_id): Path<Uuid>) -> ApiResponse<Vec<ApiKeyResponse>> {
     ApiResponse::success(vec![])
 }
 
-pub async fn delete(
-    Path((_org_id, _key_id)): Path<(Uuid, Uuid)>,
-) -> NoContent {
+pub async fn delete(Path((_org_id, _key_id)): Path<(Uuid, Uuid)>) -> NoContent {
     NoContent
 }

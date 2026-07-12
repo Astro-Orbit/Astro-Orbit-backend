@@ -82,10 +82,7 @@ pub async fn get_by_id(Path(_id): Path<Uuid>) -> ApiResponse<OrgResponse> {
     })
 }
 
-pub async fn update(
-    Path(_id): Path<Uuid>,
-    Json(_req): Json<UpdateOrgRequest>,
-) -> ApiResponse<OrgResponse> {
+pub async fn update(Path(_id): Path<Uuid>, Json(_req): Json<UpdateOrgRequest>) -> ApiResponse<OrgResponse> {
     ApiResponse::success(OrgResponse {
         id: Uuid::new_v4(),
         name: String::new(),
@@ -103,11 +100,7 @@ pub async fn add_member(
     Path(_org_id): Path<Uuid>,
     Json(_req): Json<AddMemberRequest>,
 ) -> CreatedResponse<MemberResponse> {
-    CreatedResponse::new(MemberResponse {
-        user_id: Uuid::new_v4(),
-        role: String::new(),
-        joined_at: chrono::Utc::now(),
-    })
+    CreatedResponse::new(MemberResponse { user_id: Uuid::new_v4(), role: String::new(), joined_at: chrono::Utc::now() })
 }
 
 pub async fn list_members(Path(_org_id): Path<Uuid>) -> ApiResponse<Vec<MemberResponse>> {
@@ -118,16 +111,10 @@ pub async fn update_member(
     Path((_org_id, _user_id)): Path<(Uuid, Uuid)>,
     Json(_req): Json<UpdateMemberRequest>,
 ) -> ApiResponse<MemberResponse> {
-    ApiResponse::success(MemberResponse {
-        user_id: Uuid::new_v4(),
-        role: String::new(),
-        joined_at: chrono::Utc::now(),
-    })
+    ApiResponse::success(MemberResponse { user_id: Uuid::new_v4(), role: String::new(), joined_at: chrono::Utc::now() })
 }
 
-pub async fn remove_member(
-    Path((_org_id, _user_id)): Path<(Uuid, Uuid)>,
-) -> NoContent {
+pub async fn remove_member(Path((_org_id, _user_id)): Path<(Uuid, Uuid)>) -> NoContent {
     NoContent
 }
 
@@ -139,9 +126,5 @@ pub async fn create_role(
     Path(_org_id): Path<Uuid>,
     Json(_req): Json<CreateRoleRequest>,
 ) -> CreatedResponse<RoleResponse> {
-    CreatedResponse::new(RoleResponse {
-        id: Uuid::new_v4(),
-        name: String::new(),
-        permissions: vec![],
-    })
+    CreatedResponse::new(RoleResponse { id: Uuid::new_v4(), name: String::new(), permissions: vec![] })
 }

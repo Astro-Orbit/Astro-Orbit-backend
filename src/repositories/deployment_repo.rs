@@ -3,9 +3,17 @@ use uuid::Uuid;
 
 #[async_trait]
 pub trait DeploymentRepository: Send + Sync {
-    async fn create(&self, project_id: Uuid, environment: &str, created_by: Uuid) -> Result<crate::models::deployment::Deployment, sqlx::Error>;
+    async fn create(
+        &self,
+        project_id: Uuid,
+        environment: &str,
+        created_by: Uuid,
+    ) -> Result<crate::models::deployment::Deployment, sqlx::Error>;
     async fn find_by_id(&self, id: Uuid) -> Result<crate::models::deployment::Deployment, sqlx::Error>;
-    async fn find_by_project(&self, project_id: Uuid) -> Result<Vec<crate::models::deployment::Deployment>, sqlx::Error>;
+    async fn find_by_project(
+        &self,
+        project_id: Uuid,
+    ) -> Result<Vec<crate::models::deployment::Deployment>, sqlx::Error>;
 }
 
 pub struct PgDeploymentRepository {
@@ -21,7 +29,12 @@ impl PgDeploymentRepository {
 
 #[async_trait]
 impl DeploymentRepository for PgDeploymentRepository {
-    async fn create(&self, project_id: Uuid, environment: &str, created_by: Uuid) -> Result<crate::models::deployment::Deployment, sqlx::Error> {
+    async fn create(
+        &self,
+        project_id: Uuid,
+        environment: &str,
+        created_by: Uuid,
+    ) -> Result<crate::models::deployment::Deployment, sqlx::Error> {
         sqlx::query_as::<_, crate::models::deployment::Deployment>(
             r"
             INSERT INTO deployments (project_id, environment, created_by)
@@ -53,7 +66,10 @@ impl DeploymentRepository for PgDeploymentRepository {
         .await
     }
 
-    async fn find_by_project(&self, project_id: Uuid) -> Result<Vec<crate::models::deployment::Deployment>, sqlx::Error> {
+    async fn find_by_project(
+        &self,
+        project_id: Uuid,
+    ) -> Result<Vec<crate::models::deployment::Deployment>, sqlx::Error> {
         sqlx::query_as::<_, crate::models::deployment::Deployment>(
             r"
             SELECT id, project_id, environment, status, commit_sha, commit_message,

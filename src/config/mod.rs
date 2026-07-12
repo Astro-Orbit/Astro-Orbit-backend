@@ -219,10 +219,7 @@ impl Config {
             },
             security: SecurityConfig {
                 encryption_key: env("ENCRYPTION_KEY"),
-                cors_allowed_origins: env("CORS_ALLOWED_ORIGINS")
-                    .split(',')
-                    .map(String::from)
-                    .collect(),
+                cors_allowed_origins: env("CORS_ALLOWED_ORIGINS").split(',').map(String::from).collect(),
             },
         })
     }

@@ -27,5 +27,5 @@ fn generate_request_id() -> String {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default()
         .as_millis();
-    format!("req_{:x}_{:x}", timestamp, count)
+    format!("req_{timestamp:x}_{count:x}")
 }

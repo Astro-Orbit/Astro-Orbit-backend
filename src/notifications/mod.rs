@@ -6,7 +6,7 @@
 //!
 //! Ownership: Notifications Team
 //! Dependencies: events, cache, services
-//! Public API: NotificationService, NotificationChannel
+//! Public API: `NotificationService`, `NotificationChannel`
 
 pub mod channels;
 pub mod preferences;

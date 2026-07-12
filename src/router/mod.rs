@@ -7,7 +7,7 @@ use crate::handlers;
 use crate::middleware;
 
 /// Builds the root application router.
-pub async fn build_router(config: Arc<Config>) -> anyhow::Result<Router> {
+pub fn build_router(config: &Arc<Config>) -> anyhow::Result<Router> {
     let v1_router = Router::new()
         .route("/health", get(handlers::health::health_check))
         .route("/version", get(handlers::health::version))

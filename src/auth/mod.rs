@@ -9,7 +9,7 @@
 //!
 //! Ownership: Auth Team
 //! Dependencies: config, cache, repositories
-//! Public API: issue_jwt, verify_jwt, generate_challenge, verify_signature
+//! Public API: `issue_jwt`, `verify_jwt`, `generate_challenge`, `verify_signature`
 
 pub const ACCESS_TOKEN_TTL_BUFFER_SECONDS: u64 = 30;
 pub const REFRESH_TOKEN_BYTES: usize = 32;

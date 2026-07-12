@@ -31,12 +31,12 @@ impl PgOrgRepository {
 impl OrgRepository for PgOrgRepository {
     async fn create(&self, name: &str, slug: &str, description: Option<&str>) -> Result<Organization, sqlx::Error> {
         sqlx::query_as::<_, Organization>(
-            r#"
+            r"
             INSERT INTO organizations (name, slug, description)
             VALUES ($1, $2, $3)
             RETURNING id, name, slug, description, avatar_url, plan, settings,
                       created_at, updated_at, deleted_at
-            "#,
+            ",
         )
         .bind(name)
         .bind(slug)
@@ -47,12 +47,12 @@ impl OrgRepository for PgOrgRepository {
 
     async fn find_by_id(&self, id: Uuid) -> Result<Organization, sqlx::Error> {
         sqlx::query_as::<_, Organization>(
-            r#"
+            r"
             SELECT id, name, slug, description, avatar_url, plan, settings,
                    created_at, updated_at, deleted_at
             FROM organizations
             WHERE id = $1 AND deleted_at IS NULL
-            "#,
+            ",
         )
         .bind(id)
         .fetch_one(&*self.pool)
@@ -61,13 +61,13 @@ impl OrgRepository for PgOrgRepository {
 
     async fn find_by_user(&self, user_id: Uuid) -> Result<Vec<Organization>, sqlx::Error> {
         sqlx::query_as::<_, Organization>(
-            r#"
+            r"
             SELECT o.id, o.name, o.slug, o.description, o.avatar_url, o.plan, o.settings,
                    o.created_at, o.updated_at, o.deleted_at
             FROM organizations o
             JOIN organization_members om ON om.organization_id = o.id
             WHERE om.user_id = $1 AND o.deleted_at IS NULL
-            "#,
+            ",
         )
         .bind(user_id)
         .fetch_all(&*self.pool)
@@ -76,7 +76,7 @@ impl OrgRepository for PgOrgRepository {
 
     async fn update(&self, id: Uuid, name: Option<&str>, description: Option<&str>) -> Result<Organization, sqlx::Error> {
         sqlx::query_as::<_, Organization>(
-            r#"
+            r"
             UPDATE organizations
             SET name = COALESCE($2, name),
                 description = COALESCE($3, description),
@@ -84,7 +84,7 @@ impl OrgRepository for PgOrgRepository {
             WHERE id = $1 AND deleted_at IS NULL
             RETURNING id, name, slug, description, avatar_url, plan, settings,
                       created_at, updated_at, deleted_at
-            "#,
+            ",
         )
         .bind(id)
         .bind(name)
@@ -95,7 +95,7 @@ impl OrgRepository for PgOrgRepository {
 
     async fn delete(&self, id: Uuid) -> Result<(), sqlx::Error> {
         sqlx::query(
-            r#"UPDATE organizations SET deleted_at = NOW() WHERE id = $1"#,
+            r"UPDATE organizations SET deleted_at = NOW() WHERE id = $1",
         )
         .bind(id)
         .execute(&*self.pool)
@@ -105,10 +105,10 @@ impl OrgRepository for PgOrgRepository {
 
     async fn add_member(&self, org_id: Uuid, user_id: Uuid, role: &str) -> Result<(), sqlx::Error> {
         sqlx::query(
-            r#"
+            r"
             INSERT INTO organization_members (organization_id, user_id, role)
             VALUES ($1, $2, $3)
-            "#,
+            ",
         )
         .bind(org_id)
         .bind(user_id)
@@ -120,10 +120,10 @@ impl OrgRepository for PgOrgRepository {
 
     async fn remove_member(&self, org_id: Uuid, user_id: Uuid) -> Result<(), sqlx::Error> {
         sqlx::query(
-            r#"
+            r"
             DELETE FROM organization_members
             WHERE organization_id = $1 AND user_id = $2
-            "#,
+            ",
         )
         .bind(org_id)
         .bind(user_id)
@@ -134,11 +134,11 @@ impl OrgRepository for PgOrgRepository {
 
     async fn update_member_role(&self, org_id: Uuid, user_id: Uuid, role: &str) -> Result<(), sqlx::Error> {
         sqlx::query(
-            r#"
+            r"
             UPDATE organization_members
             SET role = $3
             WHERE organization_id = $1 AND user_id = $2
-            "#,
+            ",
         )
         .bind(org_id)
         .bind(user_id)

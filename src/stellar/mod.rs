@@ -6,7 +6,7 @@
 //!
 //! Ownership: Stellar Integration Team
 //! Dependencies: config, models
-//! Public API: StellarClient, NetworkConfig, ContractDeployer
+//! Public API: `StellarClient`, `NetworkConfig`, `ContractDeployer`
 
 pub mod client;
 pub mod contract;

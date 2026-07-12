@@ -16,7 +16,7 @@ impl PaginationParams {
 
     #[must_use]
     pub fn offset(&self) -> u64 {
-        ((self.page - 1) * self.per_page) as u64
+        u64::from((self.page - 1) * self.per_page)
     }
 
     #[must_use]

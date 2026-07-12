@@ -7,8 +7,8 @@
 //!   - Auth challenge nonces
 //!
 //! Ownership: Infrastructure Team
-//! Dependencies: config (RedisConfig)
-//! Public API: CacheClient, get, set, delete, exists, ttl
+//! Dependencies: config (`RedisConfig`)
+//! Public API: `CacheClient`, get, set, delete, exists, ttl
 
 pub mod client;
 pub mod rate_limiter;

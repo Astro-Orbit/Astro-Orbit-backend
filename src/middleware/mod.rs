@@ -1,7 +1,6 @@
 mod request_id;
 
 use axum::Router;
-use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::limit::RequestBodyLimitLayer;
 use tower_http::trace::TraceLayer;
@@ -9,7 +8,7 @@ use tower_http::trace::TraceLayer;
 use crate::config::Config;
 
 /// Applies all global middleware to the router.
-pub fn apply(config: Arc<Config>, router: Router) -> Router {
+pub fn apply(config: &Config, router: Router) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(
             config

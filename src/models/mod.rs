@@ -2,7 +2,7 @@
 //!
 //! Each model is a pure Rust struct representing a database entity.
 //! Models contain no business logic and no database access — they
-//! are plain data containers with derive macros for SQLx and Serde.
+//! are plain data containers with derive macros for `SQLx` and Serde.
 //!
 //! Ownership: Data Team
 //! Dependencies: none (pure data structures)

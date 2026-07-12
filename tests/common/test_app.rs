@@ -16,11 +16,10 @@ impl TestAppBuilder {
     }
 
     /// Build and return a configured Axum Router for testing.
-    pub async fn build(self) -> axum::Router {
-        crate::router::build_router(std::sync::Arc::new(
+    pub fn build(self) -> axum::Router {
+        crate::router::build_router(&std::sync::Arc::new(
             crate::config::Config::from_env().unwrap(),
         ))
-        .await
         .unwrap()
     }
 }

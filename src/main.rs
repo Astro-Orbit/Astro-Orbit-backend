@@ -11,7 +11,7 @@ async fn main() -> anyhow::Result<()> {
 
     telemetry::init(&config);
 
-    let app = build_router(config.clone()).await?;
+    let app = build_router(&config)?;
 
     let addr = SocketAddr::new(config.app.host, config.app.port);
     info!(

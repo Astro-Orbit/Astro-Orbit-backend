@@ -10,7 +10,7 @@
 //!
 //! Ownership: Deployment Team
 //! Dependencies: stellar, services, events, cache
-//! Public API: DeploymentService, DeploymentState, create_deployment, rollback_deployment
+//! Public API: `DeploymentService`, `DeploymentState`, `create_deployment`, `rollback_deployment`
 
 pub mod pipeline;
 pub mod state;

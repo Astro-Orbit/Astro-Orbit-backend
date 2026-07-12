@@ -3,7 +3,7 @@
 # Astro Orbit Backend — Development Build
 # ────────────────────────────────────────────────────────────
 
-FROM rust:1.84-slim-bookworm
+FROM rust:slim-bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \

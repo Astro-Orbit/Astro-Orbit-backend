@@ -4,7 +4,7 @@
 # ────────────────────────────────────────────────────────────
 
 # ---------- Builder Stage ----------
-FROM rust:1.84-slim-bookworm AS builder
+FROM rust:slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \

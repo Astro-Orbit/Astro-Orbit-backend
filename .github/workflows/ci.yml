@@ -85,5 +85,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo install cargo-audit
-      - run: cargo audit --ignore RUSTSEC-2023-0071
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-deny
+        run: cargo install cargo-deny --locked
+      - name: Run cargo-deny check
+        run: cargo deny check advisories

@@ -1,15 +1,9 @@
-//! Domain entity models.
-//!
-//! Each model is a pure Rust struct representing a database entity.
-//! Models contain no business logic and no database access — they
-//! are plain data containers with derive macros for `SQLx` and Serde.
-//!
-//! Ownership: Data Team
-//! Dependencies: none (pure data structures)
-//! Public API: All model structs
-
+pub mod api_key;
+pub mod audit_log;
+pub mod challenge;
 pub mod contract;
 pub mod deployment;
+pub mod invitation;
 pub mod org;
 pub mod project;
 pub mod user;

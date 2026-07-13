@@ -6,24 +6,41 @@ use tokio::sync::RwLock;
 
 use crate::config::Config;
 use crate::handlers;
-use crate::middleware;
+use crate::middleware as midware;
 use crate::state::AppState;
 
 /// Builds the root application router with all routes and middleware.
-pub fn build_router(config: &Config, state: Arc<RwLock<AppState>>) -> Router {
-    let v1_router = Router::new()
-        // Health & Observability
-        .route("/health", get(handlers::health::health_check))
-        .route("/ready", get(handlers::health::ready_check))
-        .route("/live", get(handlers::health::live_check))
-        .route("/version", get(handlers::health::version))
-        // Authentication
+pub fn build_router(config: &Config, state: &Arc<RwLock<AppState>>) -> Router {
+    let ext = axum::Extension(state.clone());
+
+    // --- Public routes (no auth required) ---
+    let public_routes = Router::new()
         .route("/auth/challenge", post(handlers::auth::challenge))
-        .route("/auth/verify", post(handlers::auth::verify))
-        .route("/auth/refresh", post(handlers::auth::refresh))
+        .route("/auth/login", post(handlers::auth::login))
+        .route("/auth/refresh", post(handlers::auth::refresh));
+
+    // --- Protected routes (auth required) ---
+    let protected_routes = Router::new()
+        // Auth
         .route("/auth/logout", post(handlers::auth::logout))
-        .route("/auth/session", get(handlers::auth::session))
+        .route("/auth/logout-all", post(handlers::auth::logout_all))
+        // Users
+        .route("/me", get(handlers::users::get_me))
+        .route("/me", patch(handlers::users::update_me))
         // Organizations
+        .route("/organizations", post(handlers::orgs::create))
+        .route("/organizations", get(handlers::orgs::list))
+        .route("/organizations/:id", get(handlers::orgs::get_by_id))
+        .route("/organizations/:id", patch(handlers::orgs::update))
+        .route("/organizations/:id", delete(handlers::orgs::delete))
+        .route("/organizations/:id/invite", post(handlers::orgs::invite))
+        .route("/invitations/:token/accept", post(handlers::orgs::accept_invite))
+        .route("/invitations/:token/reject", post(handlers::orgs::reject_invite))
+        // API Keys
+        .route("/api-keys", post(handlers::api_keys::create))
+        .route("/api-keys", get(handlers::api_keys::list))
+        .route("/api-keys/:id", delete(handlers::api_keys::delete))
+        // Legacy routes (existing, kept for compatibility)
         .route("/orgs", post(handlers::orgs::create))
         .route("/orgs", get(handlers::orgs::list))
         .route("/orgs/:id", get(handlers::orgs::get_by_id))
@@ -67,7 +84,7 @@ pub fn build_router(config: &Config, state: Arc<RwLock<AppState>>) -> Router {
         .route("/wallets/:id", get(handlers::wallets::get_by_id))
         .route("/wallets/:id", patch(handlers::wallets::update))
         .route("/wallets/:id", delete(handlers::wallets::delete))
-        // API Keys
+        // API Keys (legacy)
         .route("/orgs/:id/api-keys", post(handlers::api_keys::create))
         .route("/orgs/:id/api-keys", get(handlers::api_keys::list))
         .route("/orgs/:id/api-keys/:key_id", delete(handlers::api_keys::delete))
@@ -85,7 +102,7 @@ pub fn build_router(config: &Config, state: Arc<RwLock<AppState>>) -> Router {
         .route("/contracts/:id/scans", get(handlers::security::list_scans))
         .route("/scans/:id", get(handlers::security::get_scan))
         .route("/scans/:id/findings", get(handlers::security::findings))
-        // Users
+        // Users (legacy)
         .route("/users/me", get(handlers::users::get_me))
         .route("/users/me", patch(handlers::users::update_me))
         .route("/users/:id", get(handlers::users::get_by_id))
@@ -93,9 +110,20 @@ pub fn build_router(config: &Config, state: Arc<RwLock<AppState>>) -> Router {
         .route("/admin/users", get(handlers::admin::users))
         .route("/admin/orgs", get(handlers::admin::orgs))
         .route("/admin/stats", get(handlers::admin::stats))
-        .layer(axum::Extension(state));
+        // Auth middleware for all protected routes
+        .route_layer(axum::middleware::from_fn(midware::auth::middleware));
+
+    // --- Health & Observability (always public) ---
+    let health_routes = Router::new()
+        .route("/health", get(handlers::health::health_check))
+        .route("/ready", get(handlers::health::ready_check))
+        .route("/live", get(handlers::health::live_check))
+        .route("/version", get(handlers::health::version));
+
+    // --- Combine routes into v1 ---
+    let v1_router = Router::new().merge(public_routes).merge(protected_routes).merge(health_routes).layer(ext);
 
     let app = Router::new().nest("/v1", v1_router);
 
-    middleware::apply(config, app)
+    midware::apply(config, app)
 }

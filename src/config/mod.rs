@@ -124,6 +124,7 @@ pub struct RedisConfig {
 pub struct AuthConfig {
     pub access_token_ttl: Duration,
     pub refresh_token_ttl: Duration,
+    pub challenge_ttl: Duration,
     pub issuer: String,
     pub audience: String,
 }
@@ -261,6 +262,7 @@ impl Config {
             auth: AuthConfig {
                 access_token_ttl: Duration::from_secs(env_parse::<u64>("JWT_ACCESS_TOKEN_TTL_MINUTES") * 60),
                 refresh_token_ttl: Duration::from_secs(env_parse::<u64>("JWT_REFRESH_TOKEN_TTL_DAYS") * 86400),
+                challenge_ttl: Duration::from_secs(env_parse_opt("AUTH_CHALLENGE_TTL_SECONDS").unwrap_or(300)),
                 issuer: env("JWT_ISSUER"),
                 audience: env("JWT_AUDIENCE"),
             },

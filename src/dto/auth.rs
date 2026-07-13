@@ -1,32 +1,36 @@
 use serde::{Deserialize, Serialize};
-use validator::Validate;
+use uuid::Uuid;
 
-#[derive(Debug, Deserialize, Validate)]
+#[derive(Debug, Deserialize)]
 pub struct ChallengeRequest {
-    #[validate(length(min = 32, max = 64))]
     pub public_key: String,
 }
 
 #[derive(Debug, Serialize)]
 pub struct ChallengeResponse {
     pub challenge: String,
-    pub session_id: String,
+    pub challenge_id: Uuid,
 }
 
-#[derive(Debug, Deserialize, Validate)]
-pub struct VerifyRequest {
-    #[validate(length(min = 32, max = 64))]
+#[derive(Debug, Deserialize)]
+pub struct LoginRequest {
     pub public_key: String,
-    #[validate(length(min = 1))]
     pub signature: String,
-    pub session_id: String,
+    pub challenge_id: Uuid,
 }
 
 #[derive(Debug, Serialize)]
-pub struct VerifyResponse {
+pub struct LoginResponse {
     pub access_token: String,
     pub refresh_token: String,
-    pub user: serde_json::Value,
+    pub user: UserDto,
+}
+
+#[derive(Debug, Serialize)]
+pub struct UserDto {
+    pub id: Uuid,
+    pub stellar_public: String,
+    pub display_name: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,4 +42,9 @@ pub struct RefreshRequest {
 pub struct RefreshResponse {
     pub access_token: String,
     pub refresh_token: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct LogoutAllRequest {
+    pub user_id: Uuid,
 }

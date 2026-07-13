@@ -9,6 +9,7 @@
 //! Dependencies: models, validation
 //! Public API: All request/response types within each submodule
 
+pub mod api_key;
 pub mod auth;
 pub mod contract;
 pub mod deployment;

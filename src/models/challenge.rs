@@ -4,13 +4,11 @@ use sqlx::FromRow;
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
-pub struct Wallet {
+pub struct WalletChallenge {
     pub id: Uuid,
     pub public_key: String,
-    pub name: Option<String>,
-    pub user_id: Option<Uuid>,
-    pub is_primary: bool,
+    pub challenge: String,
+    pub expires_at: DateTime<Utc>,
+    pub used_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub deleted_at: Option<DateTime<Utc>>,
 }

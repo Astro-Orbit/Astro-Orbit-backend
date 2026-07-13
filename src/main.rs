@@ -17,7 +17,7 @@ async fn main() -> anyhow::Result<()> {
     let state = startup(&config).await;
     let state = Arc::new(RwLock::new(state));
 
-    let app = astro_orbit_backend::router::build_router(&config, state.clone());
+    let app = astro_orbit_backend::router::build_router(&config, &state);
 
     let addr = SocketAddr::new(config.app.host, config.app.port);
     info!(

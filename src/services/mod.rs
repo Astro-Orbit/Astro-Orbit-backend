@@ -9,6 +9,7 @@
 //! Dependencies: repositories, events, cache, stellar
 //! Public API: All public service methods
 
+pub mod api_key_service;
 pub mod auth_service;
 pub mod contract_service;
 pub mod deployment_service;

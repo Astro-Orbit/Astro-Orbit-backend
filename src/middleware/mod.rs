@@ -1,3 +1,4 @@
+pub mod auth;
 mod request_id;
 mod response_meta;
 

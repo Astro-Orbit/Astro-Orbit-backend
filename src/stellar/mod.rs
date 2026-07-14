@@ -12,4 +12,5 @@ pub mod client;
 pub mod contract;
 pub mod error;
 pub mod event;
+pub mod registry_client;
 pub mod transaction;

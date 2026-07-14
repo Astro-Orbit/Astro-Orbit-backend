@@ -88,11 +88,21 @@ pub fn build_router(config: &Config, state: &Arc<RwLock<AppState>>) -> Router {
         .route("/orgs/:id/api-keys", post(handlers::api_keys::create))
         .route("/orgs/:id/api-keys", get(handlers::api_keys::list))
         .route("/orgs/:id/api-keys/:key_id", delete(handlers::api_keys::delete))
+        // Repositories
+        .route("/projects/:id/repositories", post(handlers::repos::create))
+        .route("/projects/:id/repositories", get(handlers::repos::list))
+        .route("/repositories/:id", get(handlers::repos::get_by_id))
+        .route("/repositories/:id", patch(handlers::repos::update))
+        .route("/repositories/:id", delete(handlers::repos::delete))
+        .route("/repositories/:id/sync", post(handlers::repos::sync))
         // Analytics
         .route("/orgs/:id/analytics/overview", get(handlers::analytics::overview))
         .route("/projects/:id/analytics/contract-calls", get(handlers::analytics::contract_calls))
         .route("/projects/:id/analytics/gas", get(handlers::analytics::gas_usage))
         .route("/projects/:id/analytics/users", get(handlers::analytics::active_users))
+        // Dashboard
+        .route("/orgs/:id/dashboard/stats", get(handlers::analytics::dashboard_stats))
+        .route("/dashboard/activity", get(handlers::analytics::dashboard_activity))
         // Notifications
         .route("/notifications", get(handlers::notifications::list))
         .route("/notifications/:id/read", patch(handlers::notifications::mark_read))

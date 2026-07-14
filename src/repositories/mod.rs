@@ -1,3 +1,4 @@
+pub mod activity_repo;
 pub mod api_key_repo;
 pub mod audit_repo;
 pub mod challenge_repo;
@@ -6,5 +7,6 @@ pub mod deployment_repo;
 pub mod invitation_repo;
 pub mod org_repo;
 pub mod project_repo;
+pub mod repository_repo;
 pub mod user_repo;
 pub mod wallet_repo;

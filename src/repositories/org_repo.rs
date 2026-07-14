@@ -19,6 +19,7 @@ pub trait OrgRepository: Send + Sync {
     async fn add_member(&self, org_id: Uuid, user_id: Uuid, role: &str) -> Result<(), sqlx::Error>;
     async fn remove_member(&self, org_id: Uuid, user_id: Uuid) -> Result<(), sqlx::Error>;
     async fn update_member_role(&self, org_id: Uuid, user_id: Uuid, role: &str) -> Result<(), sqlx::Error>;
+    async fn member_count(&self, org_id: Uuid) -> Result<i64, sqlx::Error>;
 }
 
 pub struct PgOrgRepository {
@@ -151,5 +152,17 @@ impl OrgRepository for PgOrgRepository {
         .execute(&*self.pool)
         .await?;
         Ok(())
+    }
+
+    async fn member_count(&self, org_id: Uuid) -> Result<i64, sqlx::Error> {
+        sqlx::query_scalar(
+            r"
+            SELECT COUNT(*) FROM organization_members
+            WHERE organization_id = $1
+            ",
+        )
+        .bind(org_id)
+        .fetch_one(&*self.pool)
+        .await
     }
 }

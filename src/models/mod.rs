@@ -1,3 +1,4 @@
+pub mod activity;
 pub mod api_key;
 pub mod audit_log;
 pub mod challenge;
@@ -6,5 +7,6 @@ pub mod deployment;
 pub mod invitation;
 pub mod org;
 pub mod project;
+pub mod repository;
 pub mod user;
 pub mod wallet;

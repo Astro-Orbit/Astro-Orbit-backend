@@ -10,5 +10,6 @@
 
 pub mod deployment_jobs;
 pub mod notification_jobs;
+pub mod queue;
 pub mod runner;
 pub mod types;

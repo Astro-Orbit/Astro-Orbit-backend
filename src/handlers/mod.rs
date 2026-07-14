@@ -9,6 +9,7 @@ pub mod health;
 pub mod notifications;
 pub mod orgs;
 pub mod projects;
+pub mod repos;
 pub mod security;
 pub mod users;
 pub mod wallets;

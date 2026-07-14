@@ -1,6 +1,6 @@
 [package]
 name = "astro-orbit-backend"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 description = "Open-source developer platform for the Stellar and Soroban ecosystem"
 authors = ["Astro Orbit Contributors"]
